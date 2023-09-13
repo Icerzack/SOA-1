@@ -1,0 +1,525 @@
+openapi: 3.0.3
+info:
+  title: Сервис-ориентированная архитектура
+  description: Лабораторная работа №1
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:1477/api/v1'
+paths:
+  # CRUD
+  /routes:
+    get:
+      summary: Получить список из элементов Route
+      description: Получить список из элементов Route
+      operationId: getRoutes
+      parameters:
+        - name: sort
+          in: query
+          description: Массив элементов, которые будут использованы для сортировки. Для сортировки по убыванию перед элементов нужно поставить знак '<'.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: <id
+              pattern: '^<{0,1}(id|name|coordinates\.x|coordinates\.y|creationDate|locationFrom\.x|locationFrom\.y|locationFrom\.name|locationTo\.x|locationTo\.y|locationTo\.z|distance)$'
+          explode: true
+        - name: filter
+          in: query
+          required: false
+          description: Массив элементов, которые будут характеризовать фильтрацию. Для каждого элемента возможна фильтрация '=', '!=', '>', '<', '>=', '<='. Элемент и тип фильтрации указываются слитно, затем идет значение.
+          schema:
+            type: array
+            items:
+              type: string
+              example: id=3
+              pattern: '^(id|name|coordinates\.x|coordinates\.y|creationDate|locationFrom\.x|locationFrom\.y|locationFrom\.name|locationTo\.x|locationTo\.y|locationTo\.z|distance)(=|!=|>|<|>=|<=)$'
+          explode: true
+        - name: page
+          in: query
+          required: false
+          description: Обозначает номер страницы, которую вывести, при условии, что работает пагинация. Если параметр 'pageSize' не указан, то по-умолчанию количество страниц равно 5. Если оба параметра не указаны, то возвращается полный список.
+          schema:
+            type: integer
+            default: 1
+            minimum: 0
+        - name: pageCount
+          in: query
+          required: false
+          description: Обозначает количество страниц, на которые произвести разбиение, при условии, что работает пагинация. Если параметр 'page' не указан, то по-умолчанию отобразится 1ая страница. Если оба параметра не указаны, то возвращается полный список.
+          schema:
+            type: integer
+            default: 5
+            minimum: 1
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Возвращает список routes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutesAllFieldsSchema'
+        '400':
+            description: Invalid query param
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorIQP'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Возвращается при прочих ошибках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+    post:
+      summary: Добавить новый Route
+      description: Добавить новый Route
+      operationId: createRoute
+      tags:
+        - Routes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteSchema'
+      responses:
+        '200':
+          description: Возвращает созданный Route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteSchema'
+        '400':
+            description: Invalid input
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorII'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Возвращается при прочих ошибках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+  /routes/{id}:
+    get:
+      summary: Получить Route по id
+      description: Получить Route по id
+      operationId: getRoute
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Route Id 
+          schema:
+            type: integer
+            format: int64
+            nullable: false
+            minimum: 1
+            example: 1
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Возвращает Route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteAllFieldsSchema'
+        '400':
+            description: Invalid query param
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorIQP'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Возвращается при прочих ошибках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+    put:
+      summary: Обновить Route по id
+      description: Обновить Route по id
+      operationId: updateRoute
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Route Id
+          schema:
+            type: integer
+            format: int64
+            nullable: false
+            minimum: 1
+            example: 1
+      tags:
+        - Routes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteSchema'
+      responses:
+        '200':
+          description: Возвращает обновленный Route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteAllFieldsSchema'
+        '400':
+            description: Invalid query param
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorIQP'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Возвращается при прочих ошибках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+    delete:
+      summary: Удалить Route по id
+      description: Удалить Route по id
+      operationId: deleteRoute
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Route Id
+          schema:
+            type: integer
+            format: int64
+            nullable: false
+            minimum: 1
+            example: 1
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Возвращает удаленный Route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteAllFieldsSchema'
+        '400':
+            description: Invalid query param
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorIQP'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Возвращается при прочих ошибках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+
+  /routes/delete-all-by-distance/{distance}:
+    delete:
+      summary: Удалить все Routes, значение поля distance которых равно заданному.
+      description: Удалить все Routes, значение поля distance которых равно заданному.
+      operationId: deleteAllByDistance
+      parameters:
+        - name: distance
+          in: path
+          required: true
+          description: Distance deleting criteria
+          schema:
+            type: integer
+            format: int64
+            nullable: false
+            minimum: 1
+            example: 1
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Возвращает список удаленных Routes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutesAllFieldsSchema'
+        '400':
+            description: Invalid query param
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorIQP'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Возвращается при прочих ошибках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+  /routes/get-all-routes-distance-sum:
+    get:
+      summary: Рассчитать сумму всех distance для всех Route
+      description: Рассчитать сумму всех distance для всех Route
+      operationId: getAllRoutesDistanceSum
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Возвращает сумму всех distance
+          content:
+            application/json:
+              schema:
+                type: number
+                example: 300
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Возвращается при прочих ошибках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+  /routes/get-count-of-routes-distance:
+    get:
+      summary: Вернуть количество объектов, значение поля distance которых больше заданного.
+      description: Вернуть количество объектов, значение поля distance которых больше заданного.
+      operationId: getCountOfRoutesDistance
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Возвращает список Routes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutesAllFieldsSchema'
+        '400':
+            description: Invalid input
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorII'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Возвращается при прочих ошибках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+
+components:
+  schemas:
+    LocationTo:
+      type: object
+      properties:
+        x:
+          type: number
+          format: float
+          example: 1
+          nullable: false
+        y:
+          type: integer
+          format: int64
+          example: 2
+        z:
+          type: integer
+          format: int64
+          example: 3
+    LocationFrom:
+      type: object
+      properties:
+        x:
+          type: integer
+          format: int64
+          example: 1
+          nullable: false
+        y:
+          type: integer
+          format: int64
+          example: 2
+        name:
+          type: string
+          example: Университет ИТМО
+          nullable: true
+    Coordinates:
+      type: object
+      properties:
+        x:
+          type: integer
+          format: int32
+          example: 111
+          nullable: false
+        y:
+          type: number
+          format: float
+          maximum: 222
+          nullable: false
+    RouteSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+          minLength: 1
+          example: Бармалеева
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        from:
+          $ref: '#/components/schemas/LocationFrom'
+        to:
+          $ref: '#/components/schemas/LocationTo'
+        distance:
+          type: number
+          format: float
+          nullable: false
+          minimum: 1
+          example: 667
+    RouteAllFieldsSchema:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              format: int64
+              minimum: 0
+              exclusiveMinimum: true
+              example: 1
+              description: unique identifier of flat
+            date:
+              type: string
+              format: date-time
+              nullable: false
+              example: 2023-09-12T00:00:00Z
+        - $ref: '#/components/schemas/RouteSchema'
+    RoutesAllFieldsSchema:
+      type: object
+      properties:
+        routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteAllFieldsSchema'
+        page:
+          type: integer
+          default: null
+        pageCount:
+          type: integer
+          default: null
+    ErrorDefault:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 404
+        message:
+          type: string
+          example: Not Found
+        time:
+          type: string
+          format: date-time
+          example: 2023-09-12T00:00:00Z
+    ErrorIQP:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 400
+        message:
+          type: string
+          example: Invalid query param
+        time:
+          type: string
+          format: date-time
+          example: 2023-09-12T00:00:00Z
+    ErrorISE:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        time:
+          type: string
+          format: date-time
+          example: 2023-09-12T00:00:00Z
+    ErrorII:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 400
+        message:
+          type: string
+          example: Invalid input
+        time:
+          type: string
+          format: date-time
+          example: 2023-09-12T00:00:00Z
