@@ -1,10 +1,10 @@
 openapi: 3.0.3
 info:
-  title: Сервис-ориентированная архитектура
-  description: Лабораторная работа №1
+  title: Сервис-ориентированная архитектура. Лабораторная работа №1 
+  description: First web service
   version: 1.0.0
 servers:
-  - url: 'https://localhost:1477/api/v1'
+  - url: 'http://localhost:8088/api/v1'
 paths:
   /routes:
     get:
@@ -21,7 +21,7 @@ paths:
             items:
               type: string
               example: <id
-              pattern: '^<{0,1}(id|name|coordinates\.x|coordinates\.y|creationDate|locationFrom\.x|locationFrom\.y|locationFrom\.name|locationTo\.x|locationTo\.y|locationTo\.z|distance)$'
+              pattern: '^<{0,1}(id|name|coordinates\.x|coordinates\.y|creationDate|location\.id|location\.x|location\.y|location\.name|distance)$'
           explode: true # explode specifies whether arrays and objects should generate separate parameters for each array item or object property
         - name: filter
           in: query
@@ -32,7 +32,7 @@ paths:
             items:
               type: string
               example: id=3
-              pattern: '^(id|name|coordinates\.x|coordinates\.y|creationDate|locationFrom\.x|locationFrom\.y|locationFrom\.name|locationTo\.x|locationTo\.y|locationTo\.z|distance)(=|!=|>|<|>=|<=)$'
+              pattern: '^(id|name|coordinates\.x|coordinates\.y|creationDate|location\.id|location\.x|location\.y|location\.name|distance)(=|!=|>|<|>=|<=)$'
           explode: true
         - name: page
           in: query
@@ -367,51 +367,66 @@ paths:
 
 components:
   schemas:
-    LocationTo:
-      type: object
-      properties:
-        x:
-          type: number
-          format: float
-          example: 1
-          nullable: false
-        y:
-          type: integer
-          format: int64
-          example: 2
-        z:
-          type: integer
-          format: int64
-          example: 3
     LocationFrom:
       type: object
       properties:
-        x:
+        id:
           type: integer
           format: int64
+          minimum: 0
+          exclusiveMinimum: true
           example: 1
-          nullable: false
-        y:
-          type: integer
-          format: int64
-          example: 2
+          description: Unique identifier of the location
+        coordinates:
+          $ref: '#/components/schemas/CoordinatesFrom'
         name:
           type: string
           example: Университет ИТМО
           nullable: true
-    Coordinates:
+    LocationTo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 0
+          exclusiveMinimum: true
+          example: 2
+          description: Unique identifier of the location
+        coordinates:
+          $ref: '#/components/schemas/CoordinatesTo'
+        name:
+          type: string
+          example: Университет СИНЕРГИЯ
+          nullable: true
+    CoordinatesFrom:
       type: object
       properties:
         x:
           type: integer
           format: int32
-          example: 111
           nullable: false
+          example: 111
         y:
           type: number
           format: float
-          maximum: 488
           nullable: false
+          maximum: 488
+          example: 222
+    CoordinatesTo:
+      type: object
+      properties:
+        x:
+          type: integer
+          format: int32
+          nullable: false
+          example: 25
+        y:
+          type: number
+          format: float
+          nullable: false
+          maximum: 488
+          example: 14
     RouteSchema:
       type: object
       properties:
@@ -420,8 +435,6 @@ components:
           nullable: false
           minLength: 1
           example: Бармалеева
-        coordinates:
-          $ref: '#/components/schemas/Coordinates'
         from:
           $ref: '#/components/schemas/LocationFrom'
         to:
