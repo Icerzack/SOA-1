@@ -341,7 +341,7 @@ paths:
         - Routes
       responses:
         '200':
-          description: Возвращает список Routes
+          description: Returns a list of Routes
           content:
             application/json:
               schema:
