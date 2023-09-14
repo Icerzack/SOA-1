@@ -461,9 +461,8 @@ components:
               description: Unique identifier of the route
             date:
               type: string
-              format: date-time
               nullable: false
-              example: 2023-09-12T00:00:00Z
+              example: "2023-09-12T00:00:00Z"
         - $ref: '#/components/schemas/RouteSchema'
     RoutesAllFieldsSchema:
       type: object
@@ -494,8 +493,7 @@ components:
           example: Not Found
         time:
           type: string
-          format: date-time
-          example: 2023-09-12T00:00:00Z
+          example: "2023-09-12T00:00:00Z"
     ErrorIQP:
       type: object
       required:
@@ -512,8 +510,7 @@ components:
           example: Invalid query param
         time:
           type: string
-          format: date-time
-          example: 2023-09-12T00:00:00Z
+          example: "2023-09-12T00:00:00Z"
     ErrorISE:
       type: object
       required:
@@ -530,8 +527,7 @@ components:
           example: Internal server error
         time:
           type: string
-          format: date-time
-          example: 2023-09-12T00:00:00Z
+          example: "2023-09-12T00:00:00Z"
     ErrorII:
       type: object
       required:
@@ -548,5 +544,4 @@ components:
           example: Invalid input
         time:
           type: string
-          format: date-time
-          example: 2023-09-12T00:00:00Z
+          example: "2023-09-12T00:00:00Z"
