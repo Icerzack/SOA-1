@@ -1,0 +1,274 @@
+openapi: 3.0.3
+info:
+  title: Сервис-ориентированная архитектура. Лабораторная работа №1 
+  description: Second web service
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8089/api/v1'
+paths:
+  /route/{id-from}/{id-to}/shortest:
+    get:
+      summary: Нахождение самого короткого маршрута между указанными локациями
+      description: Нахождение самого короткого маршрута между указанными локациями
+      operationId: findShortestPath
+      parameters:
+        - name: id-from
+          in: path
+          required: true
+          description: Location id from
+          schema:
+            type: integer
+            format: int64
+            nullable: false
+            minimum: 0
+            exclusiveMinimum: true
+            example: 1
+        - name: id-to
+          in: path
+          required: true
+          description: Location id to
+          schema:
+            type: integer
+            format: int64
+            nullable: false
+            minimum: 0
+            exclusiveMinimum: true
+            example: 2
+      tags:
+        - Route
+      responses:
+        '200':
+          description: Returns the distance of the shortest path
+          content:
+            application/json:
+              schema:
+                type: number
+                format: float
+                example: 1200
+        '400':
+          description: Invalid query param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorIQP'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Returned for other errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+  /route/{id-from}/{id-to}/add:
+    post:
+      summary: Добавление нового маршрута между указанными локациями
+      description: Добавление нового маршрута между указанными локациями
+      operationId: addNewRoute
+      parameters:
+        - name: id-from
+          in: path
+          required: true
+          description: Location id from
+          schema:
+            type: integer
+            format: int64
+            nullable: false
+            minimum: 0
+            exclusiveMinimum: true
+            example: 1
+        - name: id-to
+          in: path
+          required: true
+          description: Location id to
+          schema:
+            type: integer
+            format: int64
+            nullable: false
+            minimum: 0
+            exclusiveMinimum: true
+            example: 3
+      tags:
+        - Route
+      responses:
+        '200':
+          description: Returns new Route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteAllFieldsSchema'
+        '400':
+            description: Invalid query param
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorIQP'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorISE'
+        '404':
+          description: Returned for other errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDefault'
+components:
+  schemas:
+    LocationFrom:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 0
+          exclusiveMinimum: true
+          example: 1
+          description: Unique identifier of the location
+        coordinates:
+          $ref: '#/components/schemas/CoordinatesFrom'
+        name:
+          type: string
+          example: Университет ИТМО
+          nullable: true
+    LocationTo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 0
+          exclusiveMinimum: true
+          example: 2
+          description: Unique identifier of the location
+        coordinates:
+          $ref: '#/components/schemas/CoordinatesTo'
+        name:
+          type: string
+          example: Университет СИНЕРГИЯ
+          nullable: true
+    CoordinatesFrom:
+      type: object
+      properties:
+        x:
+          type: integer
+          format: int32
+          nullable: false
+          example: 111
+        y:
+          type: number
+          format: float
+          nullable: false
+          maximum: 488
+          example: 222
+    CoordinatesTo:
+      type: object
+      properties:
+        x:
+          type: integer
+          format: int32
+          nullable: false
+          example: 25
+        y:
+          type: number
+          format: float
+          nullable: false
+          maximum: 488
+          example: 14
+    RouteSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+          minLength: 1
+          example: Бармалеева
+        from:
+          $ref: '#/components/schemas/LocationFrom'
+        to:
+          $ref: '#/components/schemas/LocationTo'
+        distance:
+          type: number
+          format: float
+          nullable: false
+          minimum: 1
+          exclusiveMinimum: true
+          example: 667
+    RouteAllFieldsSchema:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              format: int64
+              minimum: 0
+              exclusiveMinimum: true
+              example: 1
+              description: Unique identifier of the route
+            date:
+              type: string
+              format: date-time
+              nullable: false
+              example: 2023-09-12T00:00:00Z
+        - $ref: '#/components/schemas/RouteSchema'
+    ErrorDefault:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 404
+        message:
+          type: string
+          example: Not Found
+        time:
+          type: string
+          format: date-time
+          example: 2023-09-12T00:00:00Z
+    ErrorIQP:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 400
+        message:
+          type: string
+          example: Invalid query param
+        time:
+          type: string
+          format: date-time
+          example: 2023-09-12T00:00:00Z
+    ErrorISE:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        time:
+          type: string
+          format: date-time
+          example: 2023-09-12T00:00:00Z
