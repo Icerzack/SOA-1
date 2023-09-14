@@ -95,7 +95,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RouteSchema'
+                $ref: '#/components/schemas/RouteAllFieldsSchema'
         '400':
             description: Invalid input
             content:
@@ -337,12 +337,12 @@ paths:
         - Routes
       responses:
         '200':
-          description: Returns count of Routes
+          description: Returns count of routes
           content:
             application/json:
               schema:
-                type: number
-                format: float
+                type: integer
+                format: int32
                 example: 12
         '400':
             description: Invalid input
