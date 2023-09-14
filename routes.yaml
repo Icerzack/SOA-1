@@ -32,7 +32,7 @@ paths:
             items:
               type: string
               example: id=3
-              pattern: '^(id|name|coordinates\.x|coordinates\.y|creationDate|location\.id|location\.x|location\.y|location\.name|distance)(=|!=|>|<|>=|<=)$'
+              pattern: '^(id|name|coordinates\.x|coordinates\.y|creationDate|location\.id|location\.x|location\.y|location\.name|distance)(=|!=|>|<|>=|<=)([0-9]+)$'
           explode: true
         - name: page
           in: query
@@ -223,18 +223,14 @@ paths:
       tags:
         - Routes
       responses:
-        '200':
-          description: Returns the deleted Route
+        '204':
+          description: Returned with no content
+        '400':
+          description: Invalid query param
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RouteAllFieldsSchema'
-        '400':
-            description: Invalid query param
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorIQP'
+                $ref: '#/components/schemas/ErrorIQP'
         '500':
           description: Internal server error
           content:
@@ -248,7 +244,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDefault'
 
-  /routes/distances/{distance}/delete:
+  /routes/distances/{distance}:
     delete:
       summary: Удалить все Routes, значение поля distance которых равно заданному.
       description: Удалить все Routes, значение поля distance которых равно заданному.
@@ -341,11 +337,13 @@ paths:
         - Routes
       responses:
         '200':
-          description: Returns a list of Routes
+          description: Returns count of Routes
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RoutesAllFieldsSchema'
+                type: number
+                format: float
+                example: 12
         '400':
             description: Invalid input
             content:
@@ -459,7 +457,7 @@ components:
               exclusiveMinimum: true
               example: 1
               description: Unique identifier of the route
-            date:
+            creationDate:
               type: string
               nullable: false
               example: "2023-09-12T00:00:00Z"
@@ -474,7 +472,7 @@ components:
         page:
           type: integer
           default: null
-        pageCount:
+        pagesCount:
           type: integer
           default: null
     ErrorDefault:

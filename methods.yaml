@@ -63,7 +63,7 @@ paths:
             application/json:
               schema:
                 $ref: './routes.yaml#/components/schemas/ErrorDefault'
-  /route/{id-from}/{id-to}/add:
+  /route/add/{id-from}/{id-to}:
     post:
       summary: Добавление нового маршрута между указанными локациями
       description: Добавление нового маршрута между указанными локациями
