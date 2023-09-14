@@ -90,7 +90,7 @@ paths:
             nullable: false
             minimum: 0
             exclusiveMinimum: true
-            example: 3
+            example: 2
       tags:
         - Route
       responses:
