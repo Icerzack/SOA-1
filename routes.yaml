@@ -41,7 +41,7 @@ paths:
           schema:
             type: integer
             default: 1
-            minimum: 0
+            minimum: 1
         - name: pagesCount
           in: query
           required: false
