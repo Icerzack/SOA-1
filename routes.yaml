@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Сервис-ориентированная архитектура. Лабораторная работа №1 
+  title: Сервис-ориентированная архитектура. Лабораторная работа №1
   description: First web service
   version: 1.0.0
 servers:
@@ -60,11 +60,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RoutesAllFieldsSchema'
         '400':
-            description: Invalid query param
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorIQP'
+          description: Invalid query param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorIQP'
         '500':
           description: Internal server error
           content:
@@ -88,7 +88,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RouteSchema'
+              $ref: '#/components/schemas/RouteSchemaReq'
       responses:
         '200':
           description: Returns the created Route
@@ -97,11 +97,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RouteAllFieldsSchema'
         '400':
-            description: Invalid input
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorII'
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorII'
         '500':
           description: Internal server error
           content:
@@ -123,7 +123,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: Route Id 
+          description: Route Id
           schema:
             type: integer
             format: int64
@@ -140,11 +140,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RouteAllFieldsSchema'
         '400':
-            description: Invalid query param
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorIQP'
+          description: Invalid query param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorIQP'
         '500':
           description: Internal server error
           content:
@@ -179,7 +179,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RouteSchema'
+              $ref: '#/components/schemas/RouteSchemaReq'
       responses:
         '200':
           description: Returns the updated Route
@@ -188,11 +188,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RouteAllFieldsSchema'
         '400':
-            description: Invalid query param
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorIQP'
+          description: Invalid query param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorIQP'
         '500':
           description: Internal server error
           content:
@@ -267,11 +267,11 @@ paths:
         '204':
           description: Returned with no content
         '400':
-            description: Invalid query param
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorIQP'
+          description: Invalid query param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorIQP'
         '500':
           description: Internal server error
           content:
@@ -341,11 +341,11 @@ paths:
                 format: int32
                 example: 12
         '400':
-            description: Invalid input
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorII'
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorII'
         '500':
           description: Internal server error
           content:
@@ -361,6 +361,24 @@ paths:
 
 components:
   schemas:
+    LocationFromReq:
+      type: object
+      properties:
+        coordinates:
+          $ref: '#/components/schemas/CoordinatesFrom'
+        name:
+          type: string
+          example: Университет ИТМО
+          nullable: true
+    LocationToReq:
+      type: object
+      properties:
+        coordinates:
+          $ref: '#/components/schemas/CoordinatesTo'
+        name:
+          type: string
+          example: Университет СИНЕРГИЯ
+          nullable: true
     LocationFrom:
       type: object
       properties:
@@ -421,6 +439,25 @@ components:
           nullable: false
           maximum: 488
           example: 14
+    RouteSchemaReq:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+          minLength: 1
+          example: Бармалеева
+        from:
+          $ref: '#/components/schemas/LocationFromReq'
+        to:
+          $ref: '#/components/schemas/LocationToReq'
+        distance:
+          type: number
+          format: float
+          nullable: false
+          minimum: 1
+          exclusiveMinimum: true
+          example: 667
     RouteSchema:
       type: object
       properties:
