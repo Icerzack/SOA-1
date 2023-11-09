@@ -446,6 +446,7 @@ components:
           type: string
           nullable: false
           minLength: 1
+          maxLength: 256
           example: Бармалеева
         from:
           $ref: '#/components/schemas/LocationFromReq'
@@ -465,6 +466,7 @@ components:
           type: string
           nullable: false
           minLength: 1
+          maxLength: 256
           example: Бармалеева
         from:
           $ref: '#/components/schemas/LocationFrom'
