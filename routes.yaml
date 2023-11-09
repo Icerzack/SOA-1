@@ -21,7 +21,7 @@ paths:
             items:
               type: string
               example: <id
-              pattern: '^<{0,1}(id|name|coordinates\.x|coordinates\.y|creationDate|location\.id|location\.x|location\.y|location\.name|distance)$'
+              pattern: '^<{0,1}(id|name|creationDate|location\.id|location\.coordinates\.x|location\.coordinates\.y|location\.name|distance)$'
           explode: true # explode specifies whether arrays and objects should generate separate parameters for each array item or object property
         - name: filter
           in: query
@@ -32,7 +32,7 @@ paths:
             items:
               type: string
               example: id=3
-              pattern: '^(id|name|coordinates\.x|coordinates\.y|creationDate|location\.id|location\.x|location\.y|location\.name|distance)(=|!=|>|<|>=|<=)([0-9]+)$'
+              pattern: '^<{0,1}(id|name|creationDate|location\.id|location\.coordinates\.x|location\.coordinates\.y|location\.name|distance)(=|!=|>|<|>=|<=)([0-9]+)$'
           explode: true
         - name: page
           in: query
@@ -462,6 +462,13 @@ components:
     RouteSchema:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          exclusiveMinimum: true
+          example: 2
+          description: Unique identifier of the route
         name:
           type: string
           nullable: false
