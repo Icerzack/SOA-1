@@ -37,15 +37,15 @@ paths:
         - name: page
           in: query
           required: false
-          description: Обозначает номер страницы, которую вывести, при условии, что работает пагинация. Если параметр 'pagesCount' не указан, то по умолчанию количество страниц равно 5. Если оба параметра не указаны, то возвращается полный список.
+          description: Обозначает номер страницы, которую вывести, при условии, что работает пагинация.
           schema:
             type: integer
             default: 1
             minimum: 1
-        - name: pagesCount
+        - name: elementsCount
           in: query
           required: false
-          description: Обозначает количество страниц, на которые произвести разбиение, при условии, что работает пагинация. Если параметр 'page' не указан, то по умолчанию отобразится 1-ая страница. Если оба параметра не указаны, то возвращается полный список.
+          description: Обозначает количество элементов на странице при условии, что работает пагинация.
           schema:
             type: integer
             default: 5
@@ -508,80 +508,3 @@ components:
       type: object
       properties:
         routes:
-          type: array
-          items:
-            $ref: '#/components/schemas/RouteAllFieldsSchema'
-        page:
-          type: integer
-          default: null
-        pagesCount:
-          type: integer
-          default: null
-    ErrorDefault:
-      type: object
-      required:
-        - code
-        - message
-        - time
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 404
-        message:
-          type: string
-          example: Not Found
-        time:
-          type: string
-          example: "2023-09-12T00:00:00Z"
-    ErrorIQP:
-      type: object
-      required:
-        - code
-        - message
-        - time
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 400
-        message:
-          type: string
-          example: Invalid query param
-        time:
-          type: string
-          example: "2023-09-12T00:00:00Z"
-    ErrorISE:
-      type: object
-      required:
-        - code
-        - message
-        - time
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 500
-        message:
-          type: string
-          example: Internal server error
-        time:
-          type: string
-          example: "2023-09-12T00:00:00Z"
-    ErrorII:
-      type: object
-      required:
-        - code
-        - message
-        - time
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 400
-        message:
-          type: string
-          example: Invalid input
-        time:
-          type: string
-          example: "2023-09-12T00:00:00Z"
