@@ -21,7 +21,7 @@ paths:
             items:
               type: string
               example: <id
-              pattern: '^<{0,1}(id|name|creationDate|locationFrom\.id|locationFrom\.coordinates\.x|locationFrom\.coordinates\.y|locationFrom\.name|locationTo\.id|locationTo\.coordinates\.x|locationTo\.coordinates\.y|locationTo\.name|distance)$'
+              pattern: '^<{0,1}(id|name|creationDate|locationFromId|locationFromCoordinatesX|locationFromCoordinatesY|locationFromName|locationToId|locationToCoordinatesX|locationToCoordinatesY|locationToName|distance)$'
           explode: true # explode specifies whether arrays and objects should generate separate parameters for each array item or object property
         - name: filter
           in: query
@@ -32,7 +32,7 @@ paths:
             items:
               type: string
               example: id=3
-              pattern: '^(id|name|creationDate|locationFrom\.id|locationFrom\.coordinates\.x|locationFrom\.coordinates\.y|locationFrom\.name|locationTo\.id|locationTo\.coordinates\.x|locationTo\.coordinates\.y|locationTo\.name|distance)(=|!=|>|<|>=|<=)([0-9]+)$'
+              pattern: "^(id|name|creationDate|locationFromId|locationFromCoordinatesX|locationFromCoordinatesY|locationFromName|locationToId|locationToCoordinatesX|locationToCoordinatesY|locationToName|distance)(=|!=|>|<|>=|<=)([0-9a-zA-Zа-яА-Я\\s?!,.\"'Ёё]+)$"
           explode: true
         - name: page
           in: query
