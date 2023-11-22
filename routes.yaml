@@ -508,3 +508,80 @@ components:
       type: object
       properties:
         routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteAllFieldsSchema'
+        page:
+          type: integer
+          default: null
+        elementsCount:
+          type: integer
+          default: null
+    ErrorDefault:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 404
+        message:
+          type: string
+          example: Not Found
+        time:
+          type: string
+          example: "2023-09-12T00:00:00Z"
+    ErrorIQP:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 400
+        message:
+          type: string
+          example: Invalid query param
+        time:
+          type: string
+          example: "2023-09-12T00:00:00Z"
+    ErrorISE:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        time:
+          type: string
+          example: "2023-09-12T00:00:00Z"
+    ErrorII:
+      type: object
+      required:
+        - code
+        - message
+        - time
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 400
+        message:
+          type: string
+          example: Invalid input
+        time:
+          type: string
+          example: "2023-09-12T00:00:00Z"
